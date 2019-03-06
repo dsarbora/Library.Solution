@@ -7,18 +7,18 @@ namespace Library.Models
     {
         private int Id;
         private string Title;
-        private int Copies;
+        private int NewCopies;
 
-        public Book(string title, int id=0, int copies=1)
+        public Book(string title, int id=0, int newCopies=0)
         {
             Title = title;
             Id = id;
-            Copies = copies;
+            NewCopies = newCopies;
         }
 
         public string GetTitle(){ return Title; }
         public int GetId(){ return Id; }
-        public void SetCopies(int copies){Copies=copies;}
+        public void SetCopies(int newCopies){NewCopies=newCopies;}
         public void Save()
         {
             MySqlConnection conn = DB.Connection();
@@ -29,12 +29,12 @@ namespace Library.Models
             prmTitle.Value = Title;
             cmd.Parameters.Add(prmTitle);
             cmd.ExecuteNonQuery();
+            Id = (int)cmd.LastInsertedId;
             conn.Close();
             if(conn!=null)
             {
                 conn.Dispose();
             }
-            AddCopies();
         }
 
         public void AddCopies()
@@ -46,7 +46,7 @@ namespace Library.Models
             prmBookId.ParameterName = "@bookId";
             prmBookId.Value = Id;
             cmd.Parameters.Add(prmBookId);
-            for(int i=0; i<Copies; i++)
+            for(int i=0; i<NewCopies; i++)
             {
                 cmd.ExecuteNonQuery();
             }
@@ -91,7 +91,8 @@ namespace Library.Models
             while(rdr.Read())
             {
                 string title = rdr.GetString(1);
-                Book newBook = new Book(title);
+                int id = rdr.GetInt32(0);
+                Book newBook = new Book(title, id);
                 allBooks.Add(newBook);
             }
             conn.Close();
@@ -130,7 +131,7 @@ namespace Library.Models
         {
             MySqlConnection conn = DB.Connection();
             conn.Open();
-            MySqlCommand cmd = new MySqlCommand("UPDATE book SET title=@newTitle WHERE id=@id;", conn);
+            MySqlCommand cmd = new MySqlCommand("UPDATE books SET title=@newTitle WHERE id=@id;", conn);
             MySqlParameter prmNewTitle = new MySqlParameter();
             prmNewTitle.ParameterName = "@newTitle";
             prmNewTitle.Value = newTitle;
@@ -175,6 +176,21 @@ namespace Library.Models
             if(conn!=null)
             {
                 conn.Dispose();
+            }
+        }
+
+        public override bool Equals(System.Object otherBook)
+        {
+            if(!(otherBook is Book))
+            {
+                return false;
+            }
+            else
+            {  
+                Book newBook = (Book)otherBook;
+                bool idEquality = this.GetId().Equals(newBook.GetId());
+                bool titleEquality = this.GetTitle().Equals(newBook.GetTitle());
+                return (titleEquality && idEquality);
             }
         }
 
