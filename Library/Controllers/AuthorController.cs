@@ -38,5 +38,36 @@ namespace Library.Controllers
         return View(model);
     }
 
+    [HttpGet("authors/{id}/edit")]
+    public ActionResult Edit(int id)
+    {
+      Dictionary<string, object> model = new Dictionary<string, object>();
+      Author newAuthor = Author.Find(id);
+      List<Book> authorBooks = newAuthor.GetBooks();
+      List<Book> allBooks = Book.GetAll();
+      model.Add("author", newAuthor);
+      model.Add("authorBooks", authorBooks);
+      model.Add("allBooks", allBooks);
+      return View(model);
+    }
+
+    [HttpPost("/authors/{id}/update")]
+    public ActionResult Update(int id, string name)
+    {
+      Author newAuthor = Author.Find(id);
+      newAuthor.Update(name);
+      return RedirectToAction("Show");
+
+    }
+
+    [HttpPost("/authors/{id}/deletebook/")]
+    public ActionResult DeleteBook(int id, int bookId)
+    {
+      Author newAuthor = Author.Find(id);
+      newAuthor.DeleteBook(bookId);
+      Console.WriteLine("{0} {1}", bookId, id);
+      return RedirectToAction("Show");
+    }
+
   }
 }

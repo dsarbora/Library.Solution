@@ -27,3 +27,8 @@ body{
     position: absolute;
     top: 40px;
 }
+
+ul{
+    display: inline-block;
+    text-align: left;
+}

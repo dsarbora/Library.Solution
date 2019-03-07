@@ -98,5 +98,18 @@ namespace Library.Tests
             List<Author> testList = new List<Author>{newAuthor};
             CollectionAssert.AreEqual(authors, testList);
         }
+        [TestMethod]
+        public void DeleteAuthor_DeletesAuthorFromBook_AuthorList()
+        {
+            Book newBook = new Book("Moby Dick");
+            newBook.Save();
+            Author newAuthor = new Author("Herman Melville");
+            newAuthor.Save();
+            newBook.AddAuthor(newAuthor.GetId());
+            newBook.DeleteAuthor(newAuthor.GetId());
+            List<Author> authors = newBook.GetAuthors();
+            List<Author> testList = new List<Author>{};
+            CollectionAssert.AreEqual(authors, testList);
+        }
     }
 }

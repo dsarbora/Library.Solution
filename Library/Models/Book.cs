@@ -81,6 +81,15 @@ namespace Library.Models
             return foundBook;
         }
 
+        // public static Book FindByCopyId(int copyId)
+        // {
+        //     MySqlConnection conn = BD.Connection();
+        //     conn.Open();
+        //     MySqlCommand 
+        //     Book newBook = new Book();
+        //     return newBook;
+        // }
+
         public static List<Book> GetAll()
         {
             List<Book> allBooks = new List<Book> {};
@@ -239,6 +248,27 @@ namespace Library.Models
                 conn.Dispose();
             }
             return allBookAuthors;
+        }
+
+        public void DeleteAuthor(int authorId)
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            MySqlCommand cmd = new MySqlCommand("DELETE FROM books_authors WHERE book_id=@bookId and author_id=@authorId", conn);
+            MySqlParameter prmBookId = new MySqlParameter();
+            prmBookId.ParameterName = "@bookId";
+            prmBookId.Value = Id;
+            cmd.Parameters.Add(prmBookId);
+            MySqlParameter prmAuthorId = new MySqlParameter();
+            prmAuthorId.ParameterName = "@authorId";
+            prmAuthorId.Value = authorId;
+            cmd.Parameters.Add(prmAuthorId);
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            if(conn != null)
+            {
+                conn.Dispose();
+            }
         }
 
         // public void GetCheckedOut()

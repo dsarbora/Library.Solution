@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
+using System;
+
 
 namespace Library.Models
 {
@@ -181,5 +183,25 @@ namespace Library.Models
             }
         }
 
+        public void DeleteBook(int bookId)
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            MySqlCommand cmd = new MySqlCommand("DELETE FROM books_authors WHERE book_id=@bookId and author_id=@authorId;", conn);
+            MySqlParameter prmBookId = new MySqlParameter();
+            prmBookId.ParameterName = "@bookId";
+            prmBookId.Value = bookId;
+            cmd.Parameters.Add(prmBookId);
+            MySqlParameter prmAuthorId = new MySqlParameter();
+            prmAuthorId.ParameterName = "@authorId";
+            prmAuthorId.Value = Id;
+            cmd.Parameters.Add(prmAuthorId);
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            if(conn != null)
+            {
+                conn.Dispose();
+            }
+        }
     }
 }

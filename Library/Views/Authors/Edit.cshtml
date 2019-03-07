@@ -1,0 +1,23 @@
+@using Library.Models;
+<div class="header">
+    <h1 class="title">Edit Author</h1>
+</div>
+<hr>
+<form action='/authors/@Model["author"].GetId()/update' method="post">
+    <input id="id" name="id" type="hidden" value='@Model["author"].GetId()'>
+    <label for="name">Name</label>
+    <input id="name" name="name" value='@Model["author"].GetName()' type="text">
+    <button type="submit">Submit</button>
+</form>
+
+<form action='/authors/@Model["author"].GetId()/deletebook' method="post">
+        <select id="bookId" name="bookId">
+        @foreach(Book book in Model["authorBooks"])
+        {
+            <option value='@book.GetId()'>@book.GetTitle()</option>
+        }
+        </select>
+        <button type="submit">Delete</button>
+</form>
+
+    
