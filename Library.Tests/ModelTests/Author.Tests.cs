@@ -16,7 +16,7 @@ namespace Library.Tests
         public void Dispose()
         {
             Author.ClearAll();
-            //Author.ClearAll();
+            Book.ClearAll();
             //Patron.ClearAll();
         }
 
@@ -26,6 +26,8 @@ namespace Library.Tests
             Author newAuthor = new Author("Herman Melville");
             newAuthor.Save();
             Author testAuthor = Author.GetAll()[0];
+            // Console.WriteLine("{0} {1}", newAuthor.GetId(), testAuthor.GetId());
+            // Console.WriteLine("{0} {1}", newAuthor.GetName(), testAuthor.GetName());
             Assert.AreEqual(newAuthor, testAuthor);
         }
 
@@ -60,6 +62,18 @@ namespace Library.Tests
 
             Author foundAuthor = Author.GetAll()[0];
             Assert.AreEqual(newAuthor, foundAuthor);
+        }
+        [TestMethod]
+        public void AddBook_AddsBookToAuthor_BookList()
+        {
+            Book newBook = new Book("Moby Dick");
+            newBook.Save();
+            Author newAuthor = new Author("Herman Melville");
+            newAuthor.Save();
+            newAuthor.AddBook(newBook.GetId());
+            List<Book> books = newAuthor.GetBooks();
+            List<Book> testList = new List<Book>{newBook};
+            CollectionAssert.AreEqual(books, testList);
         }
     }
 }

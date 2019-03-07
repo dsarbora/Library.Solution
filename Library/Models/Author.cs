@@ -117,6 +117,55 @@ namespace Library.Models
             }
         }
 
+        public void AddBook(int bookId)
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            MySqlCommand cmd = new MySqlCommand("INSERT INTO books_authors (book_id, author_id) VALUES (@bookId, @authorId);", conn);
+            MySqlParameter prmBookId = new MySqlParameter();
+            prmBookId.ParameterName = "@bookId";
+            prmBookId.Value = bookId;
+            cmd.Parameters.Add(prmBookId);
+            MySqlParameter prmAuthorId = new MySqlParameter();
+            prmAuthorId.ParameterName = "@authorId";
+            prmAuthorId.Value = Id;
+            cmd.Parameters.Add(prmAuthorId);
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            if(conn != null)
+            {
+                conn.Dispose();
+            }
+        }
+
+
+        public List<Book> GetBooks()
+        {
+            List<Book> allAuthorBooks = new List<Book>{};
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            MySqlCommand cmd = new MySqlCommand("SELECT books.* FROM books JOIN books_authors ba ON (books.id=ba.book_id) JOIN authors ON (ba.author_id=authors.id) WHERE authors.id = @id;", conn);
+            MySqlParameter prmId = new MySqlParameter();
+            prmId.ParameterName = "@id";
+            prmId.Value = Id;
+            cmd.Parameters.Add(prmId);
+            MySqlDataReader rdr = cmd.ExecuteReader();
+            while(rdr.Read())
+            {
+                string title = rdr.GetString(1);
+                int bookId = rdr.GetInt32(0);
+                Book newBook = new Book(title, bookId);
+                allAuthorBooks.Add(newBook);
+            }
+            conn.Close();
+            if(conn!=null)
+            {
+                conn.Dispose();
+            }
+            return allAuthorBooks;
+        }
+
+
         public override bool Equals(System.Object otherAuthor)
         {
             if(!(otherAuthor is Author))

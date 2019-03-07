@@ -194,7 +194,52 @@ namespace Library.Models
             }
         }
 
+        public void AddAuthor(int authorId)
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            MySqlCommand cmd = new MySqlCommand("INSERT INTO books_authors (book_id, author_id) VALUES (@bookId, @authorId);", conn);
+            MySqlParameter prmBookId = new MySqlParameter();
+            prmBookId.ParameterName = "@bookId";
+            prmBookId.Value = Id;
+            cmd.Parameters.Add(prmBookId);
+            MySqlParameter prmAuthorId = new MySqlParameter();
+            prmAuthorId.ParameterName = "@authorId";
+            prmAuthorId.Value = authorId;
+            cmd.Parameters.Add(prmAuthorId);
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            if(conn != null)
+            {
+                conn.Dispose();
+            }
+        }
 
+        public List<Author> GetAuthors()
+        {
+            List<Author> allBookAuthors = new List<Author>{};
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            MySqlCommand cmd = new MySqlCommand("SELECT authors.* FROM books JOIN books_authors ba ON (books.id=ba.book_id) JOIN authors ON (ba.author_id=authors.id) WHERE books.id = @id;", conn);
+            MySqlParameter prmId = new MySqlParameter();
+            prmId.ParameterName = "@id";
+            prmId.Value = Id;
+            cmd.Parameters.Add(prmId);
+            MySqlDataReader rdr = cmd.ExecuteReader();
+            while(rdr.Read())
+            {
+                string name = rdr.GetString(1);
+                int authorId = rdr.GetInt32(0);
+                Author newAuthor = new Author(name, authorId);
+                allBookAuthors.Add(newAuthor);
+            }
+            conn.Close();
+            if(conn!=null)
+            {
+                conn.Dispose();
+            }
+            return allBookAuthors;
+        }
 
         
     }

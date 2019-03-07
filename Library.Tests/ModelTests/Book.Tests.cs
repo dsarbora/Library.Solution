@@ -16,7 +16,7 @@ namespace Library.Tests
         public void Dispose()
         {
             Book.ClearAll();
-            //Author.ClearAll();
+            Author.ClearAll();
             //Patron.ClearAll();
         }
 
@@ -84,6 +84,19 @@ namespace Library.Tests
             newBook.DeleteCopy(allCopies[0]);
             int result = newBook.GetAllCopies().Count;
             Assert.AreEqual(allCopies.Count-1, result);
+        }
+
+        [TestMethod]
+        public void AddAuthor_AddsAuthorToBook_AuthorList()
+        {
+            Book newBook = new Book("Moby Dick");
+            newBook.Save();
+            Author newAuthor = new Author("Herman Melville");
+            newAuthor.Save();
+            newBook.AddAuthor(newAuthor.GetId());
+            List<Author> authors = newBook.GetAuthors();
+            List<Author> testList = new List<Author>{newAuthor};
+            CollectionAssert.AreEqual(authors, testList);
         }
     }
 }
