@@ -1,0 +1,16 @@
+@using Library.Models;
+
+<h1>@Model["book"].GetTitle()</h1>
+<h2> By
+@foreach (Author author in Model["authors"])
+{
+    @author.GetName() 
+}</h2>
+
+<p>Copies</p>
+@foreach (int copy in Model["copies"])
+{
+    <p>@copy</p>
+}
+
+<p><a href="/books">Go back</a></p>

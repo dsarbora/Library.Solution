@@ -1,0 +1,12 @@
+@using Library.Models;
+<h1>@Model["author"].GetName()</h1>
+<h2>Books</h2>
+<ul>
+@foreach(Book book in Model["books"])
+{
+    <li>@book.GetTitle()</li>
+}
+</ul>
+
+<p><a href='/authors/@Model["author"].GetId()/edit'>Edit</a></p>
+<p><a href="/authors/">Go back</a></p>

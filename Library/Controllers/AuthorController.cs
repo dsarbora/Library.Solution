@@ -28,5 +28,15 @@ namespace Library.Controllers
         return RedirectToAction("Index");
     }
 
+    [HttpGet("/authors/{id}")]
+    public ActionResult Show(int id)
+    {
+        Dictionary<string, object> model = new Dictionary<string, object>();
+        Author newAuthor = Author.Find(id);
+        model["author"] = newAuthor;
+        model["books"] = newAuthor.GetBooks();
+        return View(model);
+    }
+
   }
 }
