@@ -241,6 +241,13 @@ namespace Library.Models
             return allBookAuthors;
         }
 
+        // public void GetCheckedOut()
+        // {
+        //     MySqlConnection conn = DB.Connection();
+        //     conn.Open();
+        //     MySqlCommand cmd = new MySqlCommand(";",);
+        // }
+
         
     }
 }

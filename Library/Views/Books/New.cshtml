@@ -1,19 +1,39 @@
 @using Library.Models;
-<h1>New Book</h1>
-<form action="/books/create" method="post">
-    <label for="title">Name</label>
-    <input id="title" name="title" type="text" required>
-    <label for="authorId">Author: </label>
-    <select id="authorId" name="authorId">
-        @foreach(Author author in Model)
-        {
-            <option value="@author.GetId()">@author.GetName()</option>
-        }
-    </select>
-    <label for="copies">Number of copies</label>
-    <input id="copies" name="copies" type="number" value="0" min="0">
-    <button type="submit">Add</button>
-</form>
+@{
+    Layout="_Layout";
+}
+<div class="header">
+    <h1 class="title">New Book</h1>
+    <hr>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form action="/books/create" method="post">
+            <label for="title">Name</label>
+            <input id="title" name="title" type="text" required>
+            <label for="authorId">Author: </label>
+            <select id="authorId" name="authorId">
+                @foreach(Author author in Model)
+                {
+                    <option value="@author.GetId()">@author.GetName()</option>
+                }
+            </select>
+            <br>
+            <label for="copies">Number of copies</label>
+            <input id="copies" name="copies" type="number" value="0" min="0">
+            <button class="btn btn-info" type="submit">Add</button>
+        </form>
+    </div>
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-4">
+    </div>
+</div>
+
 
 <p><a href="/books">Go back</a></p>
 <p><a href="/authors/new">Add new author</a></p>

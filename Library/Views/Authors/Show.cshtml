@@ -1,12 +1,30 @@
 @using Library.Models;
-<h1>@Model["author"].GetName()</h1>
-<h2>Books</h2>
-<ul>
-@foreach(Book book in Model["books"])
-{
-    <li>@book.GetTitle()</li>
+@{
+    Layout="_Layout";
 }
-</ul>
+<div class="header">
+    <h1 class="title">@Model["author"].GetName()</h1>
+    <hr>
+</div>
 
-<p><a href='/authors/@Model["author"].GetId()/edit'>Edit</a></p>
-<p><a href="/authors/">Go back</a></p>
+<div class="row">
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-2">
+        <p><a href='/authors/@Model["author"].GetId()/edit'>Edit</a></p>
+        <p><a href="/authors/">Go back</a></p>
+    </div>
+    <div class="col-md-4 center">
+        <h4>Books</h4>
+        <ul>
+        @foreach(Book book in Model["books"])
+        {
+            <li>@book.GetTitle()</li>
+        }
+        </ul>
+    </div>
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-2">
+    </div>
+

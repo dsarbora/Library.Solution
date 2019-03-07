@@ -1,0 +1,29 @@
+body{
+    background-color: #cccccc;
+    color: black;
+}
+
+.title{
+    font-size: 35px;
+}
+
+.header{
+    text-align: center;
+    /* background-color: #EEEEEE;
+    border-radius: 10px; */
+}
+
+.center{
+    text-align: center;
+}
+
+.left{
+    float: left;
+}
+.right{
+    float: right;
+}
+.book{
+    position: absolute;
+    top: 40px;
+}
