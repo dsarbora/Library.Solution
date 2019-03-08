@@ -117,7 +117,7 @@ namespace Library.Models
         {
             MySqlConnection conn=DB.Connection();
             conn.Open();
-            MySqlCommand cmd = new MySqlCommand("INSERT INTO books_patrons (copy_id, book_id, patron_id, @checked_out, checkout_date, due_date) VALUES (@copy_id, @book_id, @patron_id, TRUE, @checkout_date, @due_date);", conn);
+            MySqlCommand cmd = new MySqlCommand("INSERT INTO books_patrons (copy_id, book_id, patron_id, checked_out, checkout_date, due_date) VALUES (@copy_id, @book_id, @patron_id, @checked_out, @checkout_date, @due_date);", conn);
             MySqlParameter prmCopyId = new MySqlParameter();
             prmCopyId.ParameterName = "@copy_id";
             prmCopyId.Value = copyId;
@@ -125,7 +125,7 @@ namespace Library.Models
             MySqlParameter prmBookId= new MySqlParameter();
             prmBookId.ParameterName = "@book_id";
             prmBookId.Value = bookId;
-            cmd.Parameters.Add(bookId);
+            cmd.Parameters.Add(prmBookId);
             MySqlParameter prmPatronId = new MySqlParameter();
             prmPatronId.ParameterName = "@patron_id";
             prmPatronId.Value = Id;
@@ -137,17 +137,43 @@ namespace Library.Models
             MySqlParameter prmCheckoutDate = new MySqlParameter();
             prmCheckoutDate.ParameterName = "@checkout_date";
             prmCheckoutDate.Value = checkoutDate;
-            cmd.Parameters.Add(checkoutDate);
+            cmd.Parameters.Add(prmCheckoutDate);
             MySqlParameter prmDueDate = new MySqlParameter();
             prmDueDate.ParameterName = "@due_date";
             prmDueDate.Value = dueDate;
-            cmd.Parameters.Add(dueDate);
+            cmd.Parameters.Add(prmDueDate);
             cmd.ExecuteNonQuery();
             conn.Close();
             if(conn!=null)
             {
                 conn.Dispose();
             }
+        }
+
+        public List<Book> GetCheckedOutBooks()
+        {
+            List<Book> allBooks = new List<Book>{};
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            MySqlCommand cmd = new MySqlCommand("SELECT books.* FROM patrons JOIN books_patrons bp ON (patrons.id = bp.patron_id) JOIN books ON (bp.book_id = books.id) WHERE patrons.id = @patronId;", conn);
+            MySqlParameter prmPatronId = new MySqlParameter();
+            prmPatronId.ParameterName = "@patronId";
+            prmPatronId.Value = Id;
+            cmd.Parameters.Add(prmPatronId);
+            MySqlDataReader rdr = cmd.ExecuteReader();
+            while(rdr.Read())
+            {
+                int id = rdr.GetInt32(0);
+                string title = rdr.GetString(1);
+                Book newBook = new Book(title, id);
+                allBooks.Add(newBook);
+            }
+            conn.Close();
+            if(conn!=null)
+            {
+                conn.Dispose();
+            }
+            return allBooks;
         }
 
         

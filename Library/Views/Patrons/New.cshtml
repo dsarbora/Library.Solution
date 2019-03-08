@@ -1,0 +1,10 @@
+@using Library.Models;
+
+<h1>Create New Patron</h1>
+<form action="/patrons/create" method="post">
+    <label for="name">Name</label>
+    <input id="name" name="name" type="text" required>
+    <button type="submit">Create</button>
+</form>
+<p><a href="/patrons">Back to patrons</a></p>
+<p><a href="/">Home</a></p>

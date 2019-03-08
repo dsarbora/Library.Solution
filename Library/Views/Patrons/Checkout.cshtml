@@ -1,0 +1,11 @@
+@using Library.Models;
+<form action="/patrons/@Model["patron"].GetId()/get_book" method="post">
+    <select id="bookId" name="bookId">
+    @foreach(Book book in Model["books"])
+    {
+        <option value="@book.GetId()">@book.GetTitle()
+        </option>
+    }
+    </select>
+    <button type="submit">Checkout</button>
+</form>
